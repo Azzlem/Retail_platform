@@ -1,39 +1,32 @@
-from rest_framework import viewsets
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
 
 from products.models import Product
 from products.serializers import ProductSerializer
-from users.permissions import IsOwnerOrStaff
+from users.models import User
+from users.permissions import IsOwnerOrStaffProduct
 
 
-class ProductView(viewsets.ViewSet):
+class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
-
-    def list(self, request):
-        pass
-
-    def create(self, request):
-        pass
-
-    def retrieve(self, request, pk=None):
-        pass
-
-    def update(self, request, pk=None):
-        pass
-
-    def partial_update(self, request, pk=None):
-        pass
-
-    def destroy(self, request, pk=None):
-        pass
 
     def get_permissions(self):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
-        if self.action == 'list':
+        if self.action in ['list', 'create']:
             permission_classes = [IsAuthenticated]
         else:
-            permission_classes = [IsOwnerOrStaff]
+            permission_classes = [IsOwnerOrStaffProduct, IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+    def perform_create(self, serializer):
+        """
+        Создание продукта и установление владельца.
+        """
+        product = serializer.save()
+        product.owner = get_object_or_404(User, id=self.request.user.id)
+        product.save()

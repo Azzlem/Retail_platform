@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.utils import timezone
 
@@ -8,7 +9,7 @@ from users.models import User
 class Product(models.Model):
     name = models.CharField(max_length=150, verbose_name="Product Name")
     model = models.CharField(max_length=150, verbose_name="Product Model")
-    date_release = models.DateField(verbose_name="Date Released", default=timezone.now)
+    date_release = models.DateTimeField(verbose_name="Date Released", default=timezone.now)
 
     owner = models.ForeignKey(User, verbose_name="Owner", on_delete=models.CASCADE, **NULLABLE)
 
