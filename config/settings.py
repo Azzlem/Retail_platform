@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_yasg',
 
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+    'products.apps.ProductsConfig',
+    'retail.apps.RetailConfig',
 
 ]
 
@@ -147,3 +149,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 AUTH_USER_MODEL = 'users.User'
+NULLABLE = {'null': True, 'blank': True}
