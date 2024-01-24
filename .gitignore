@@ -1,3 +1,4 @@
 .env
 .env_docker
 .idea
+pg_data
